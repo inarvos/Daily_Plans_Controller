@@ -1,0 +1,2 @@
+TODO: Add Event reminder and connect it to Notifications.
+TODO: Add an opportunity to both describe an event by the End Time and Duration and for them to be related.
