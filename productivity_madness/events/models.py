@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+
 import datetime
 
 class Event(models.Model):
@@ -13,6 +14,7 @@ class Event(models.Model):
         ('yearly', 'Yearly')])
     description = models.TextField(max_length=200, blank=True)
     start_date = models.DateTimeField(default=timezone.now(), blank=False)
+
     duration = models.DurationField(default=datetime.timedelta(hours=1), blank=False)
 
     @property
