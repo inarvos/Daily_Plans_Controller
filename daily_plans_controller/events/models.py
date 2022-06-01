@@ -4,6 +4,8 @@ from django.db.models.fields import CharField
 from django.utils import timezone
 import datetime
 
+"TODO Maybe choices = choose 1/2/3 Hour/Day/Month etc"
+
 class Task(models.Model):
     name = models.CharField(max_length=100)
     description = models.CharField(max_length=100)
@@ -64,7 +66,7 @@ class Event(models.Model):
     start_date = models.DateTimeField(default=timezone.now(), blank=False)
     duration = models.DurationField(default=datetime.timedelta(hours=1), blank=False)
     "TODO"
-    reminder = CharField(max_length=20, choices = [
+    reminder = CharField(default=None, max_length=20, choices = [
         ('month_before', 'Month before'),
         ('2weeks_before', '2 weeks before'),
         ('1week_before', '1 week before'),
