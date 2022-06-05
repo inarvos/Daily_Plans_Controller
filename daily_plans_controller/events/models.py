@@ -1,7 +1,9 @@
+from django import utils
+import django
 from django.db import models
 from django.db.models.deletion import CASCADE
 from django.db.models.fields import CharField
-from django.utils import timezone
+import django.utils.timezone as timezone
 import datetime
 
 "TODO Maybe choices = choose 1/2/3 Hour/Day/Month etc"
@@ -16,14 +18,14 @@ class Task(models.Model):
     done_at = models.DateTimeField(null=True)
     archived = models.BooleanField(default=False)
     "TODO"
-    postponed = models.CharField(default=False, blank=True, max_length=20, choices = [
+    postponed = models.CharField(blank=True, null=True, max_length=20, choices = [
         ('1day', 'One day'),
         ('3days', 'Three days'),
         ('1week', 'One week'),
         ('2weeks', 'Two weeks'),
         ('1month', 'One month')])
-    "TODO If deadline:"
-    reminder = models.CharField(default=False, blank=True, max_length=20, choices = [
+    "TODO: If deadline:"
+    reminder = models.CharField(blank=True, null=True, max_length=20, choices = [
         ('week_before', 'Week before'),
         ('2days_before', '2 days before'),
         ('1day_before', '1 day before'),
@@ -63,10 +65,14 @@ class Event(models.Model):
         ('monthly', 'Monthly'),
         ('yearly', 'Yearly')])
     description = models.TextField(max_length=200, blank=True)
-    start_date = models.DateTimeField(default=timezone.now(), blank=False)
+    start_date = models.DateTimeField(default=timezone.now, blank=False)
     duration = models.DurationField(default=datetime.timedelta(hours=1), blank=False)
     "TODO"
+<<<<<<< HEAD
     reminder = CharField(default=None, max_length=20, choices = [
+=======
+    reminder = CharField(default='month_before', max_length=20, choices = [
+>>>>>>> notification_class
         ('month_before', 'Month before'),
         ('2weeks_before', '2 weeks before'),
         ('1week_before', '1 week before'),
@@ -82,3 +88,11 @@ class Event(models.Model):
 
     def __str__(self):
         return "Event(name={}, repeatable={})".format(self.name, self.repeatable)
+
+"TODO"
+class Notification(models.Model):
+    name = models.CharField(max_length=50)
+    'task_deadline_reminder = Task.deadline - Task.reminder'
+    'task_postponed_reminder = timezone.now() + Task.postponed'
+    'event_repeatable_reminder = timezone.now()'
+    'event_start_reminder = timezone.now() - Event.reminder'
