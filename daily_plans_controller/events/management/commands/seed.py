@@ -14,7 +14,7 @@ def fill_events(count: int):
         repeatable = random.choice(('not_repeatable', 'once', 'daily', 'weekly', 'monthly', 'yearly'))
         start_date = faker.date_time_between(datetime.datetime.now() - timedelta(weeks=2), datetime.datetime.now() + timedelta(weeks=2))
         duration = timedelta(hours=random.choice((1, 3, 5, 10)))
-        reminder = random.choice(('month_before', '2weeks_before', '1week_before', '3days_before', '1day_before', '3hours_before'))
+        reminder = random.choice((timedelta(weeks=-4), timedelta(weeks=-2), timedelta(weeks=-1), timedelta(days=-3), timedelta(days=-1), timedelta(hours=-3), timedelta(hours=-1)))
         event = Event(name=name, description=description, repeatable=repeatable, start_date=start_date, duration=duration, reminder=reminder)
         event.save()
         

@@ -2,7 +2,8 @@ from django import utils
 import django
 from django.db import models
 from django.db.models.deletion import CASCADE
-from django.db.models.fields import CharField
+from datetime import timedelta
+from django.db.models.fields import CharField, DurationField
 import django.utils.timezone as timezone
 import datetime
 
@@ -17,27 +18,20 @@ class Task(models.Model):
     archived = models.BooleanField(default=False)
     "TODO"
     postponed = models.CharField(blank=True, null=True, max_length=20, choices = [
-        ('1day', 'One day'),
-        ('3days', 'Three days'),
-        ('1week', 'One week'),
-        ('2weeks', 'Two weeks'),
-        ('1month', 'One month')])
+        (timedelta(days=1), 'One day'),
+        (timedelta(days=3), 'Three days'),
+        (timedelta(weeks=1), 'One week'),
+        (timedelta(weeks=2), 'Two weeks'),
+        (timedelta(weeks=4), 'One month')])
     "TODO: If deadline:"
     reminder = models.CharField(blank=True, null=True, max_length=20, choices = [
-        ('week_before', 'Week before'),
-        ('2days_before', '2 days before'),
-        ('1day_before', '1 day before'),
-        ('3hours_before', '3 hours before'),
-        ('1hour_before', '1 hour before'),
-        ('30min_before', '30 minutes before'),
-        ('15min_before', '15 minutes before')])
-
-    """
-    TODO
-    Notifications:
-        if deadline + reminder: create Notification = deadline - reminder;
-        if postponed: create Notification = Today + postpone time
-    """
+        (timedelta(weeks=-1), 'Week before'),
+        (timedelta(days=-2), '2 days before'),
+        (timedelta(days=-1), '1 day before'),
+        (timedelta(hours=-3), '3 hours before'),
+        (timedelta(hours=-1), '1 hour before'),
+        (timedelta(minutes=-30), '30 minutes before'),
+        (timedelta(minutes=-30), '15 minutes before')])
 
     def save(self, *args, **kwargs):
         if self.done:
@@ -66,15 +60,14 @@ class Event(models.Model):
     start_date = models.DateTimeField(default=timezone.now, blank=False)
     duration = models.DurationField(default=datetime.timedelta(hours=1), blank=False)
     "TODO"
-    reminder = CharField(default='month_before', max_length=20, choices = [
-        ('month_before', 'Month before'),
-        ('2weeks_before', '2 weeks before'),
-        ('1week_before', '1 week before'),
-        ('3days_before', '3 days before'),
-        ('1day_before', '1 day before'),
-        ('3hours_before', '3 hours before')])
-
-    "TODO Notification = start_date - reminder"
+    reminder = models.DurationField(default=timedelta(weeks=-4), choices = [
+        (timedelta(weeks=-4), 'Month before'),
+        (timedelta(weeks=-2), '2 weeks before'),
+        (timedelta(weeks=-1), '1 week before'),
+        (timedelta(days=-3), '3 days before'),
+        (timedelta(days=-1), '1 day before'),
+        (timedelta(hours=-3), '3 hours before'),
+        (timedelta(hours=-1), '1 hour before')])
 
     @property
     def end_date(self):
@@ -83,9 +76,9 @@ class Event(models.Model):
     def __str__(self):
         return "Event(name={}, repeatable={})".format(self.name, self.repeatable)
 
-"TODO"
 class Notification(models.Model):
     name = models.CharField(max_length=50)
+    description = models.CharField(default=None, max_length=30)
     'task_deadline_reminder = Task.deadline - Task.reminder'
     'task_postponed_reminder = timezone.now() + Task.postponed'
     'event_repeatable_reminder = timezone.now()'
