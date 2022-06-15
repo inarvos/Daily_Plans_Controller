@@ -1,9 +1,8 @@
+from datetime import timedelta
 from django import utils
 import django
 from django.db import models
 from django.db.models.deletion import CASCADE
-from datetime import timedelta
-from django.db.models.fields import CharField, DurationField
 import django.utils.timezone as timezone
 import datetime
 
@@ -13,25 +12,20 @@ class Task(models.Model):
     parent = models.ForeignKey('self', blank=True, null=True, on_delete=CASCADE)
     deadline = models.DateTimeField(blank=True, null=True)
     done = models.BooleanField(default=False)
-    "TODO If done -> archive"
     done_at = models.DateTimeField(null=True)
     archived = models.BooleanField(default=False)
-    "TODO"
-    postponed = models.CharField(blank=True, null=True, max_length=20, choices = [
+    postponed = models.DurationField(default=timedelta(), blank=True, choices = [
         (timedelta(days=1), 'One day'),
         (timedelta(days=3), 'Three days'),
         (timedelta(weeks=1), 'One week'),
         (timedelta(weeks=2), 'Two weeks'),
         (timedelta(weeks=4), 'One month')])
-    "TODO: If deadline:"
-    reminder = models.CharField(blank=True, null=True, max_length=20, choices = [
+    reminder = models.DurationField(default=timedelta(), blank=True, choices = [
         (timedelta(weeks=-1), 'Week before'),
         (timedelta(days=-2), '2 days before'),
         (timedelta(days=-1), '1 day before'),
         (timedelta(hours=-3), '3 hours before'),
-        (timedelta(hours=-1), '1 hour before'),
-        (timedelta(minutes=-30), '30 minutes before'),
-        (timedelta(minutes=-30), '15 minutes before')])
+        (timedelta(hours=-1), '1 hour before')])
 
     def save(self, *args, **kwargs):
         if self.done:
@@ -40,8 +34,10 @@ class Task(models.Model):
                 child.done = True
                 child.save()
             self.done_at = timezone.now()
+            self.archived = True
         elif not self.done and self.done_at:
             self.done_at = None
+            self.archived = False
         super().save(*args, **kwargs)
     
     def __str__(self):
@@ -49,17 +45,20 @@ class Task(models.Model):
 
 class Event(models.Model):
     name = models.CharField(max_length=50)
-    repeatable = models.CharField(max_length=20, choices = [
-        ('not_repeatable', 'Not repeatable'),
-        ('once', 'Once'),
-        ('daily', 'Daily'),
-        ('weekly', 'Weekly'),
-        ('monthly', 'Monthly'),
-        ('yearly', 'Yearly')])
     description = models.TextField(max_length=200, blank=True)
+    repeatable = models.DurationField(default=timedelta(weeks=4), choices = [
+        (timedelta(days=1), 'Daily'),
+        (timedelta(weeks=1), 'Weekly'),
+        (timedelta(weeks=4), 'Monthly'),
+        (timedelta(days=365), 'Yearly')])
     start_date = models.DateTimeField(default=timezone.now, blank=False)
-    duration = models.DurationField(default=datetime.timedelta(hours=1), blank=False)
-    "TODO"
+    duration = models.DurationField(default=timedelta(hours=1), blank=False, choices = [
+        (timedelta(hours=2), 'Two hours'),
+        (timedelta(hours=3), 'Three hours'),
+        (timedelta(hours=6), 'Six hours'),
+        (timedelta(hours=12), 'Twelve hours'),
+        (timedelta(days=1), 'One day')])
+    #TODO
     reminder = models.DurationField(default=timedelta(weeks=-4), choices = [
         (timedelta(weeks=-4), 'Month before'),
         (timedelta(weeks=-2), '2 weeks before'),

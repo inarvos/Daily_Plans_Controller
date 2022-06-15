@@ -9,4 +9,4 @@ class TaskAdmin(admin.ModelAdmin):
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
     fields = ('name', 'repeatable', 'description', 'start_date', 'duration', 'reminder') 
-    list_display = ['id', 'name', 'repeatable', 'start_date', 'end_date']
+    list_display = ['id', 'name', 'repeatable', 'description', 'start_date', 'duration', 'reminder', 'end_date']
