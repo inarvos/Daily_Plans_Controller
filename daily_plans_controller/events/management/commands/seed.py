@@ -6,8 +6,8 @@ import datetime
 from datetime import timedelta
 
 faker = Faker()
-
-#TODO
+        
+#TODO: Fix 'None if done' which is not working properly.
 def fill_tasks(count: int):
     for _ in range(count):
         name = faker.sentence()
@@ -17,9 +17,10 @@ def fill_tasks(count: int):
         done = random.choice([True, False])
         done_at = datetime.datetime.now() if done else None
         archived = random.choice([True, False]) if done else False
-        postponed = random.choice((timedelta(days=1), timedelta(days=3), timedelta(weeks=1), timedelta(weeks=2), timedelta(weeks=4))) if not done else timedelta()
-        reminder = random.choice((timedelta(weeks=-1), timedelta(days=-2), timedelta(days=-1), timedelta(hours=-3), timedelta(hours=-1))) if deadline else timedelta()
-        task = Task(name=name, description=description, parent=parent, deadline=deadline, done=done, done_at=done_at, archived=archived, postponed=postponed, reminder=reminder)
+        postponed = None if done else random.choice((timedelta(), timedelta(days=1), timedelta(days=3), timedelta(weeks=1), timedelta(weeks=2), timedelta(weeks=4)))
+        deadline_reminder = None if done else random.choice((timedelta(), timedelta(weeks=-1), timedelta(days=-2), timedelta(days=-1), timedelta(hours=-3), timedelta(hours=-1)))
+        postponed_reminder = None if done else random.choice((timedelta(weeks=-1), timedelta(days=-2), timedelta(days=-1), timedelta(hours=-3), timedelta(hours=-1)))
+        task = Task(name=name, description=description, parent=parent, deadline=deadline, postponed=postponed, _deadline_reminder=deadline_reminder, _postponed_reminder=postponed_reminder, done=done, done_at=done_at, archived=archived)
         task.save()
 
 def fill_events(count: int):

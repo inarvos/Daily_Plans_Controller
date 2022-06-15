@@ -14,18 +14,41 @@ class Task(models.Model):
     done = models.BooleanField(default=False)
     done_at = models.DateTimeField(null=True)
     archived = models.BooleanField(default=False)
-    postponed = models.DurationField(default=timedelta(), blank=True, choices = [
+    #TODO: Switch to DateField / DateTimeField:
+    postponed = models.DurationField(default=timedelta(), blank=True, null=True, choices = [
         (timedelta(days=1), 'One day'),
         (timedelta(days=3), 'Three days'),
         (timedelta(weeks=1), 'One week'),
         (timedelta(weeks=2), 'Two weeks'),
         (timedelta(weeks=4), 'One month')])
-    reminder = models.DurationField(default=timedelta(), blank=True, choices = [
+    _deadline_reminder = models.DurationField(blank=True, null=True, choices = [
         (timedelta(weeks=-1), 'Week before'),
         (timedelta(days=-2), '2 days before'),
         (timedelta(days=-1), '1 day before'),
         (timedelta(hours=-3), '3 hours before'),
         (timedelta(hours=-1), '1 hour before')])
+    _postponed_reminder = models.DurationField(blank=True, null=True, choices = [
+        (timedelta(weeks=-1), 'Week before'),
+        (timedelta(days=-2), '2 days before'),
+        (timedelta(days=-1), '1 day before'),
+        (timedelta(hours=-3), '3 hours before'),
+        (timedelta(hours=-1), '1 hour before')])
+
+    @property
+    def deadline_reminder(self):
+        if self.deadline and not self.done:
+            self._deadline_reminder = timedelta(weeks=1)
+        else:
+            self._deadline_reminder = timedelta()
+        return self._deadline_reminder
+
+    @property
+    def postponed_reminder(self):
+        if self.postponed and not self.done:
+            self._postponed_reminder = timedelta(weeks=1)
+        else:
+            self._postponed_reminder = timedelta()
+        return self._postponed_reminder
 
     def save(self, *args, **kwargs):
         if self.done:
