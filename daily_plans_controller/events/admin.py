@@ -1,10 +1,10 @@
 from django.contrib import admin
-from .models import Event, Task
+from .models import Notification, Task, Event
 
 @admin.register(Task)
 class TaskAdmin(admin.ModelAdmin):
-    fields = ('name', 'description', 'parent', 'deadline', 'postponed', '_deadline_reminder', '_postponed_reminder', 'done')
-    list_display = ['parent', 'id', 'name', 'description', 'deadline', 'postponed', '_deadline_reminder', '_postponed_reminder', 'done']
+    fields = ('name', 'description', 'parent', 'deadline', 'postponed', 'deadline_reminder', 'postponed_reminder', 'done')
+    list_display = ['parent', 'id', 'name', 'description', 'deadline', 'postponed', 'deadline_reminder', 'postponed_reminder', 'done']
 
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
