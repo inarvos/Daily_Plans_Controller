@@ -57,7 +57,7 @@ class Event(models.Model):
         (timedelta(weeks=1), 'Weekly'),
         (timedelta(weeks=4), 'Monthly'),
         (timedelta(days=365), 'Yearly')])
-    start_date = models.DateTimeField(default=timezone.now, blank=False)
+    start = models.DateTimeField(default=timezone.now, blank=False)
     duration = models.DurationField(default=timedelta(hours=1), blank=False, choices = [
         (timedelta(hours=2), 'Two hours'),
         (timedelta(hours=3), 'Three hours'),
@@ -74,11 +74,24 @@ class Event(models.Model):
         (timedelta(hours=-1), '1 hour before')])
 
     @property
-    def end_date(self):
-        return self.start_date + self.duration
+    def end(self):
+        return self.start + self.duration
 
     def __str__(self):
         return "Event(name={}, repeatable={})".format(self.name, self.repeatable)
+
+class Reminder(models.Model):
+    name = models.CharField(max_length=50)
+    description = models.CharField(max_length=200, blank=True)
+    repeatable = models.DurationField(default=timedelta(weeks=4), choices = [
+        (timedelta(days=1), 'Daily'),
+        (timedelta(weeks=1), 'Weekly'),
+        (timedelta(weeks=4), 'Monthly'),
+        (timedelta(days=365), 'Yearly')])
+    start = models.DateTimeField(default=timezone.now, blank=False)
+
+    def __str__(self):
+        return "Reminder(name={}, repeatable={})".format(self.name, self.repeatable)
 
 class Notification(models.Model):
     'task_deadline_reminder = Task.deadline - Task.reminder'

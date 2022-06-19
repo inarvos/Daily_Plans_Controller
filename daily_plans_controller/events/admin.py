@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Notification, Task, Event
+from .models import Task, Event, Reminder, Notification
 
 @admin.register(Task)
 class TaskAdmin(admin.ModelAdmin):
@@ -8,5 +8,10 @@ class TaskAdmin(admin.ModelAdmin):
 
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
-    fields = ('name', 'repeatable', 'description', 'start_date', 'duration', 'reminder') 
-    list_display = ['id', 'name', 'repeatable', 'description', 'start_date', 'duration', 'reminder', 'end_date']
+    fields = ('name', 'repeatable', 'description', 'start', 'duration', 'reminder') 
+    list_display = ['id', 'name', 'repeatable', 'description', 'start', 'duration', 'reminder', 'end']
+
+@admin.register(Reminder)
+class ReminderAdmin(admin.ModelAdmin):
+    fields = ('name', 'repeatable', 'description', 'start') 
+    list_display = ['id', 'name', 'repeatable', 'description', 'start']
