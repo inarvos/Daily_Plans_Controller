@@ -8,7 +8,7 @@ import datetime
 
 class Task(models.Model):
     name = models.CharField(max_length=100)
-    description = models.CharField(max_length=100)
+    description = models.TextField(max_length=100, blank=True)
     parent = models.ForeignKey('self', blank=True, null=True, on_delete=CASCADE)
     deadline = models.DateTimeField(blank=True, null=True)
     done = models.BooleanField(default=False)
@@ -41,6 +41,10 @@ class Task(models.Model):
                 child.save()
             self.done_at = timezone.now()
             self.archived = True
+            self.deadline = None
+            self.postponed = None
+            self.deadline_reminder = None
+            self.postponed_reminder = None
         elif not self.done and self.done_at:
             self.done_at = None
             self.archived = False
@@ -50,7 +54,7 @@ class Task(models.Model):
         return f"Task(name={self.name}, id={self.id})"
 
 class Event(models.Model):
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=100)
     description = models.TextField(max_length=200, blank=True)
     repeatable = models.DurationField(default=timedelta(weeks=4), choices = [
         (timedelta(days=1), 'Daily'),
@@ -81,7 +85,7 @@ class Event(models.Model):
         return "Event(name={}, repeatable={})".format(self.name, self.repeatable)
 
 class Reminder(models.Model):
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=100)
     description = models.CharField(max_length=200, blank=True)
     repeatable = models.DurationField(default=timedelta(weeks=4), choices = [
         (timedelta(days=1), 'Daily'),
@@ -94,7 +98,7 @@ class Reminder(models.Model):
         return "Reminder(name={}, repeatable={})".format(self.name, self.repeatable)
 
 class Notification(models.Model):
-    'task_deadline_reminder = Task.deadline - Task.reminder'
-    'task_postponed_reminder = timezone.now() + Task.postponed'
-    'event_repeatable_reminder = timezone.now()'
-    'event_start_reminder = timezone.now() - Event.reminder'
+    """task_deadline_reminder = Task.deadline - Task.reminder
+    task_postponed_reminder = timezone.now() + Task.postponed
+    event_repeatable_reminder = timezone.now()
+    event_start_reminder = timezone.now() - Event.reminder"""

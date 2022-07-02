@@ -13,8 +13,8 @@ def fill_tasks(count: int):
         name = faker.sentence()
         description = faker.text()
         parent = random.choice(Task.objects.all()) if Task.objects.all() else None
-        deadline = faker.date_time_between(datetime.datetime.now(), datetime.datetime.now() + timedelta(weeks=4))
         done = random.choice([True, False])
+        deadline = None if done else faker.date_time_between(datetime.datetime.now(), datetime.datetime.now() + timedelta(weeks=4))
         done_at = datetime.datetime.now() if done else None
         archived = random.choice([True, False]) if done else False
         postponed = None if done else random.choice((timedelta(), timedelta(days=1), timedelta(days=3), timedelta(weeks=1), timedelta(weeks=2), timedelta(weeks=4)))
