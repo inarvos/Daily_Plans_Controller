@@ -1,5 +1,5 @@
 import random
-from events.models import Event, Task, Reminder
+from schedule.models import Event, Task, Reminder
 from django.core.management.base import BaseCommand
 from faker import Faker
 import datetime

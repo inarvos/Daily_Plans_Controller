@@ -1,5 +1,5 @@
 from datetime import timezone
-from events.models import Task
+from schedule.models import Task
 
 class NotificationService:
 
