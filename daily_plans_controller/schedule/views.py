@@ -5,4 +5,7 @@ import datetime
 # Create your views here.
 
 def index(request):
-    return render(request, 'index.html', {'curr_date':datetime.datetime.now()})
+    return render(request, 'index.html', {})
+
+def practice(request):
+    return render(request, 'practice.html', {'curr_date':datetime.datetime.now()})

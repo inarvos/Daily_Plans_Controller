@@ -1,2 +1,2 @@
-# productivity-madness
+# daily-plans-controller
 ...
