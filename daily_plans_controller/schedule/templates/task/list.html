@@ -1,0 +1,16 @@
+<table>
+	<theader>
+		<td>Id</td>
+		<td>Name</td>
+		<td>Price</td>
+	</theader>
+	<tbody>
+	{% for task in tasks %}
+		<tr>
+			<td>{{task.id}}</td>
+			<td>{{task.name}}</td>
+			<td>{{task.done}}</td>
+		</tr>
+	{% endfor %}
+	</tbody>
+</table>
