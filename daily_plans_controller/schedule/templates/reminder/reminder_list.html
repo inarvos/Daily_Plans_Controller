@@ -1,0 +1,9 @@
+<h1>Reminders</h1>
+
+<ul>
+    {% for reminder in object_list %}
+    <li>{{ reminder.id }} - {{ reminder.name }} - {{ reminder.description }}</li>
+            {% empty %}
+        <li>No reminders yet.</li>
+    {% endfor %}
+</ul>
