@@ -3,7 +3,8 @@ import schedule.views as views
 from django.urls import path
 
 urlpatterns = [
-    path('practice/', views.practice, name='practice'),
-    path('tasks', views.tasks, name='tasks'),
-    path('tasks2', views.TaskListView.as_view(), name='tasks2'),
+    path('tasks1', views.tasks, name='tasks1'),
+    path('tasks', views.TaskListView.as_view(), name='tasks'),
+    path('events', views.EventListView.as_view(), name='events'),
+    path('reminders', views.ReminderListView.as_view(), name='reminders'),
 ]
