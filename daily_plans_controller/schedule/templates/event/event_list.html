@@ -16,8 +16,8 @@
 						<h2>Manage <b>Events</b></h2>
 					</div>
 					<div class="col-sm-6">
-						<a href="#addEmployeeModal" class="btn btn-success" data-toggle="modal"><i class="material-icons"></i> <span>Add New Event</span></a>
-						<a href="#deleteEmployeeModal" class="btn btn-danger" data-toggle="modal"><i class="material-icons"></i> <span>Delete</span></a>						
+						<a href="#addNewEvent" class="btn btn-success" data-toggle="modal"><i class="material-icons"></i> <span>Add New Event</span></a>
+						<a href="#deleteEvent" class="btn btn-danger" data-toggle="modal"><i class="material-icons"></i> <span>Delete</span></a>						
 					</div>
 				</div>
 			</div>
@@ -43,7 +43,7 @@
             <td>{{event.name}}</td>
             <td>{{event.description}}</td>
             <td><a href="#"><i class="bi-pencil"></i></a></td>
-            <td><a href="#"><i class="bi-trash"></i></a></td>
+						<td><a href="{% url 'event_confirm_delete' %}"><i class="bi-trash"></i></a></td>
 					</tr>
         {% endfor %}
 				</tbody>

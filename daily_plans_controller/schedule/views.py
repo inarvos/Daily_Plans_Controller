@@ -1,8 +1,9 @@
 from django.http.response import HttpResponse
 from django.shortcuts import render
 from django.views.generic.list import ListView
-import datetime
+from django.views.generic.edit import DeleteView
 from schedule.models import Task, Event, Reminder
+from django.urls import reverse_lazy
 
 # Create your views here.
 
@@ -27,6 +28,15 @@ class EventListView(ListView):
     #def get_queryset(self, **kwargs):
         #events = [e for e in Event.objects.all()]
         #return Event.objects.all()
+
+class EventDeleteView(DeleteView):
+    model = Event
+    #success_url = reverse_lazy('events')
+    success_url = "/"
+    template_name = 'event/event_confirm_delete.html'
+
+    #def get(self, *args, **kwargs):
+    #return self.delete(*args, **kwargs)
 
 class ReminderListView(ListView):
     model = Reminder
