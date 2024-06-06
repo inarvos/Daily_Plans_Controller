@@ -7,7 +7,8 @@ This project, inspired by personal experience, aims to offer a compact and user-
 
 
 
-![logo](https://github.com/inarvos/Daily_Plans_Controller/assets/37037175/8acc8e35-7e02-4fea-88e7-c6dc78e840df)
+![logo](https://github.com/inarvos/Daily_Plans_Controller/assets/37037175/95e06964-0c4a-4f7a-9434-fbe6a3226eaf)
+
 
 
 
